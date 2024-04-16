@@ -16,28 +16,28 @@ class MenuTitle extends StatefulWidget {
   /// açık mı başlasın
   final bool? isOpenStart;
 
-  const MenuTitle({
-    super.key,
-    required this.title,
-    required this.children,
-    this.activeIcon,
-    this.inactiveIcon,
-    this.isOpenStart,
-  });
+  final Widget? trailing;
+
+  const MenuTitle(
+      {super.key,
+      required this.title,
+      required this.children,
+      this.activeIcon,
+      this.inactiveIcon,
+      this.isOpenStart,
+      this.trailing});
 
   @override
   State<MenuTitle> createState() => _MenuTitleState();
 }
 
 class _MenuTitleState extends State<MenuTitle> {
-  bool isCollapsed = false;
+  late bool isCollapsed;
 
   @override
   void initState() {
+    isCollapsed = widget.isOpenStart ?? false;
     super.initState();
-    setState(() {
-      isCollapsed = widget.isOpenStart ?? false;
-    });
   }
 
   @override
@@ -49,14 +49,12 @@ class _MenuTitleState extends State<MenuTitle> {
       onExpansionChanged: (value) => setState(() {
         isCollapsed = value;
       }),
+      trailing: widget.trailing,
       maintainState: isCollapsed,
       leading: isCollapsed
           ? widget.activeIcon ?? const Icon(Icons.menu)
           : widget.activeIcon ?? const Icon(Icons.menu_open),
-      title: Text(
-        widget.title,
-        style: Theme.of(context).textTheme.titleMedium
-      ),
+      title: Text(widget.title, style: Theme.of(context).textTheme.titleMedium),
       controlAffinity: ListTileControlAffinity.leading,
       children: widget.children,
     );
